@@ -1,159 +1,101 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
-const cors = require('cors');
-const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
-// Saari HTML/CSS files ko allow karne ke liye
-app.use(express.static(__dirname));
-
-// Main link par index.html dikhane ke liye
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
 
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json());
+app.use(express.static(__dirname));
 
-// Main link par index.html dikhane ke liye (Yeh aapke paas pehle se hai)
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+// Complete MongoDB Connection String
+const mongoURI = "mongodb+srv://ajent03:surendra03@cluster0.vs3zsv9.mongodb.net/mscresh?retryWrites=true&w=majority&appName=Cluster0";
+
+// 👉 YAHAN SE PURANE OPTIONS HATA DIYE HAIN
+mongoose.connect(mongoURI)
+.then(() => {
+    console.log('✅ MongoDB Connected Successfully');
+}).catch((err) => {
+    console.log('❌ MongoDB Connection Error:', err);
 });
 
-// 👉 YAHAN SE NAYA CODE ADD KAREIN: Baaki saare HTML pages ko chalane ke liye
-app.get('/:page', (req, res) => {
-    res.sendFile(__dirname + '/' + req.params.page);
-});
-// 👈 YAHAN TAK
-
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: { origin: "*", methods: ["GET", "POST"] }
-});
-
-// ==========================================
-// 1. MONGODB CONNECTION 
-// ==========================================
-const MONGO_URL = "mongodb://ajent03:surendra03@ac-9vyil4w-shard-00-00.vs3zsv9.mongodb.net:27017,ac-9vyil4w-shard-00-01.vs3zsv9.mongodb.net:27017,ac-9vyil4w-shard-00-02.vs3zsv9.mongodb.net:27017/?ssl=true&replicaSet=atlas-n4c1c2-shard-0&authSource=admin&appName=Cluster0";
-
-mongoose.connect(MONGO_URL)
-    .then(() => console.log("🟢 MongoDB Database successfully connect ho gaya!"))
-    .catch((err) => console.log("🔴 Database connection failed:", err));
-
-
-// ==========================================
-// 2. USER STRUCTURE (Data kaise save hoga)
-// ==========================================
 const userSchema = new mongoose.Schema({
     mobile: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    balance: { type: Number, default: 59.00 } // ₹59 Bonus
+    balance: { type: Number, default: 59 } 
 });
 const User = mongoose.model('User', userSchema);
 
-
-// ==========================================
-// 3. REGISTRATION API 
-// ==========================================
 app.post('/register', async (req, res) => {
     try {
         const { mobile, password } = req.body;
-
-        const existingUser = await User.findOne({ mobile: mobile });
+        const existingUser = await User.findOne({ mobile });
         if (existingUser) {
-            return res.json({ success: false, message: "Ye mobile number pehle se registered hai! Kripya Login karein." });
+            return res.json({ success: false, message: 'User already exists! Please Login.' });
         }
-
-        const newUser = new User({
-            mobile: mobile,
-            password: password,
-            balance: 59.00
-        });
-        await newUser.save(); 
-
-        console.log("🟢 Naya User Save Hua! Number: " + mobile);
-        return res.json({ success: true, message: "Registration Successful! Aapko ₹59 ka bonus mila hai." });
-        
+        const newUser = new User({ mobile, password });
+        await newUser.save();
+        res.json({ success: true, message: 'Registration Successful! ₹59 Bonus Added.', mobile: newUser.mobile, balance: newUser.balance });
     } catch (error) {
-        console.log(error);
-        return res.json({ success: false, message: "Server error, kripya thodi der baad try karein." });
+        res.json({ success: false, message: 'Server Error!' });
     }
 });
 
-
-// ==========================================
-// 4. LOGIN API
-// ==========================================
 app.post('/login', async (req, res) => {
     try {
         const { mobile, password } = req.body;
-
-        const user = await User.findOne({ mobile: mobile });
-        if (!user) {
-            return res.json({ success: false, message: "Ye mobile number registered nahi hai! Pehle Register karein." });
+        const user = await User.findOne({ mobile, password });
+        if (user) {
+            res.json({ success: true, message: 'Login Successful!', mobile: user.mobile, balance: user.balance });
+        } else {
+            res.json({ success: false, message: 'Invalid Mobile Number or Password!' });
         }
-
-        if (user.password !== password) {
-            return res.json({ success: false, message: "Galat password! Kripya sahi password dalein." });
-        }
-
-        console.log("🟢 User Successfully Login Ho Gaya! Number: " + mobile);
-        return res.json({ 
-            success: true, 
-            message: "Login Successful!", 
-            balance: user.balance,
-            mobile: user.mobile 
-        });
-
     } catch (error) {
-        console.log(error);
-        return res.json({ success: false, message: "Server error, kripya thodi der baad try karein." });
+        res.json({ success: false, message: 'Server Error!' });
     }
 });
 
-
-// ==========================================
-// 4.5 RESET PASSWORD API (Naya Password Set Karega)
-// ==========================================
 app.post('/reset-password', async (req, res) => {
     try {
         const { mobile, newPassword } = req.body;
-
-        // Check karein ki number database mein hai ya nahi
-        const user = await User.findOne({ mobile: mobile });
-        if (!user) {
-            return res.json({ success: false, message: "Ye mobile number registered nahi hai! Pehle account banayein." });
+        const user = await User.findOne({ mobile });
+        if (user) {
+            user.password = newPassword;
+            await user.save();
+            res.json({ success: true, message: 'Password Updated Successfully!' });
+        } else {
+            res.json({ success: false, message: 'Mobile number not found!' });
         }
-
-        // Agar user mil gaya toh uska password badal do
-        user.password = newPassword;
-        await user.save();
-
-        console.log("🟢 User ne Password Badla! Number: " + mobile);
-        return res.json({ success: true, message: "Aapka naya password set ho gaya hai! Ab naye password se login karein." });
-
     } catch (error) {
-        console.log(error);
-        return res.json({ success: false, message: "Server error, kripya thodi der baad try karein." });
+        res.json({ success: false, message: 'Server Error!' });
     }
 });
 
-// ==========================================
-// 5. SOCKET.IO (Live Game Engine)
-// ==========================================
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/:page', (req, res) => {
+    res.sendFile(path.join(__dirname, req.params.page));
+});
+
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: { origin: "*" }
+});
+
 io.on('connection', (socket) => {
-    console.log('🟢 Ek user game mein aaya! ID: ' + socket.id);
+    console.log('🎮 A user connected to the game:', socket.id);
+    
     socket.on('disconnect', () => {
-        console.log('🔴 User game se chala gaya! ID: ' + socket.id);
+        console.log('User disconnected:', socket.id);
     });
 });
 
-
-// ==========================================
-// SERVER START (Port 5002)
-// ==========================================
-const PORT = 5002;
+const PORT = process.env.PORT || 5002;
 server.listen(PORT, () => {
-    console.log(`🚀 Ms Cresh Backend Port ${PORT} par shuru ho gaya hai!`);
+    console.log(`🚀 Server is running on port ${PORT}`);
 });
