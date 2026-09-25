@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Cresh - Live Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #03000a; color: white; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 450px; background: linear-gradient(180deg, #0a0520 0%, #03000a 100%); position: relative; padding: 15px; overflow-x: hidden; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .back-btn { font-size: 20px; color: white; cursor: pointer; text-decoration: none; }
+        .logo { font-size: 20px; font-weight: 900; color: white; font-style: italic; }
+        .logo span { color: #ff00ff; }
+        .game-wallet { background: rgba(0,0,0,0.5); border: 1px solid #ffcc00; border-radius: 20px; padding: 5px 10px; display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: bold; color: #ffcc00; }
+        
+        .history-row { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .history-item { border: 1px solid #5c2eff; border-radius: 20px; padding: 5px 15px; display: flex; flex-direction: column; align-items: center; min-width: 80px; background: rgba(92, 46, 255, 0.1); }
+        .h-period { font-size: 10px; color: #a0a0a0; }
+        .h-multiplier { font-size: 14px; font-weight: 900; color: #00d2ff; }
+        .h-crashed { color: #ff00ff; border-color: #ff00ff; background: rgba(255,0,255,0.1); }
+
+        .game-area { background: #080315; border: 1px solid #5c2eff; border-radius: 15px; height: 250px; position: relative; overflow: hidden; margin-bottom: 20px; box-shadow: 0 0 20px rgba(92, 46, 255, 0.2); }
+        .graph-line { position: absolute; bottom: 20px; left: 40px; width: 80%; height: 60%; border-bottom: 2px solid #ff00ff; border-left: 2px transparent; border-radius: 0 0 0 100%; box-shadow: inset 0 -10px 20px rgba(255,0,255,0.2); transition: 0.1s; }
+        .rocket { position: absolute; top: 30px; right: 40px; font-size: 40px; color: #ff0000; transform: rotate(45deg); transition: 0.1s; }
+        .flying-animation { animation: shake 0.5s infinite; }
+        @keyframes shake { 0% { transform: rotate(45deg) translate(1px, 1px); } 50% { transform: rotate(45deg) translate(-1px, -1px); } }
+        
+        .main-multiplier { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; }
+        .multiplier-text { font-size: 55px; font-weight: 900; color: white; line-height: 1; }
+        .status-text { font-size: 14px; font-weight: 700; color: #ffcc00; letter-spacing: 2px; }
+        
+        .bet-panel { border: 1px solid #333; border-radius: 15px; padding: 15px; margin-bottom: 15px; background: #0a0515; }
+        .bet-controls { display: flex; gap: 10px; margin-top: 10px; }
+        .amount-section { flex: 1; }
+        .amount-input-box { display: flex; justify-content: space-between; align-items: center; border: 1px solid #ff00ff; border-radius: 20px; padding: 5px 15px; margin-bottom: 10px; }
+        .amount-value { font-size: 18px; font-weight: 900; background: transparent; border: none; color: white; text-align: center; width: 60px; outline: none;}
+        .play-btn { flex: 1; border: none; border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-weight: 900; cursor: pointer; background: linear-gradient(135deg, #ff00ff, #ff007f); font-size: 24px; transition: 0.3s; }
+        .btn-cashout { background: linear-gradient(135deg, #ffcc00, #ff8800) !important; color: black !important; }
+        .btn-disabled { background: #333 !important; color: #777 !important; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <a href="sonumonuhome.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+            <div class="logo">Ms <span>Cresh</span> <i class="fa-solid fa-rocket" style="color:#b829ff;"></i></div>
+            <div class="game-wallet">
+                <i class="fa-solid fa-wallet"></i> <span id="gameBalance">₹ 0.00</span>
+            </div>
+        </div>
+
+        <div class="history-row" id="historyRow">
+            <!-- Auto generated history will appear here -->
+        </div>
+
+        <!-- Live Game Area -->
+        <div class="game-area">
+            <div class="graph-line" id="graphLine"></div>
+            <i class="fa-solid fa-rocket rocket" id="rocketIcon"></i>
+            <div class="main-multiplier">
+                <div class="status-text" id="gameStatusText">CONNECTING...</div>
+                <div class="multiplier-text" id="liveMultiplier">1.00x</div>
+            </div>
+        </div>
+
+        <!-- Single Bet Panel -->
+        <div class="bet-panel">
+            <div style="text-align:center; font-size:12px; color:#8da4d0; margin-bottom:10px;">Current Period: <span id="displayPeriod" style="color:#ffcc00; font-weight:bold;">1026</span></div>
+            <div class="bet-controls">
+                <div class="amount-section">
+                    <div class="amount-input-box">
+                        <div style="cursor:pointer; font-weight:bold;" onclick="changeAmount(-10)">-</div>
+                        <input type="number" class="amount-value" id="betAmount" value="10">
+                        <div style="cursor:pointer; font-weight:bold;" onclick="changeAmount(10)">+</div>
+                    </div>
+                </div>
+                <button class="play-btn" id="btnPlay" onclick="handleBet()">
+                    <span id="textPlay">BET</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket.io Client Script (Backend se jodne ke liye) -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <!-- Time-Synchronized Live Engine -->
+    <script>
+        // Backend Server se connection
+        const socket = io("http://localhost:3000");
+
+        socket.on("connect", () => {
+            console.log("Server se jud gaye! Meri ID: " + socket.id);
+        });
+
+        let betState = 'none'; // 'none', 'placed', 'cashed_out'
+        let betValue = 0;
+        let myCurrentMultiplier = 1.00;
+
+        window.onload = function() {
+            updateBalanceUI();
+            setInterval(gameEngineLoop, 50); // Game 20 times a second chalega
+        };
+
+        function updateBalanceUI() {
+            let bal = localStorage.getItem("userBalance");
+            if(!bal) { bal = "59.00"; localStorage.setItem("userBalance", bal); }
+            document.getElementById("gameBalance").innerText = "₹ " + parseFloat(bal).toFixed(2);
+        }
+
+        function changeAmount(val) {
+            let inp = document.getElementById("betAmount");
+            let newVal = parseInt(inp.value) + val;
+            if(newVal >= 10 && betState === 'none') inp.value = newVal;
+        }
+
+        function gameEngineLoop() {
+            let startTime = parseInt(localStorage.getItem('game_startTime')) || 0;
+            let currentPeriod = parseInt(localStorage.getItem('game_period')) || 1026;
+            let crashPt = parseFloat(localStorage.getItem('game_crashPoint')) || 1.10;
+            
+            // Timings Calculate karna
+            let flightTime = ((crashPt - 1.00) / 0.01) * 30; 
+            let totalRoundTime = 10000 + flightTime + 4000; // 10s wait + flight + 4s crash
+            let elapsed = Date.now() - startTime;
+
+            // Naya round start karne ka logic
+            if (elapsed > totalRoundTime || startTime === 0) {
+                localStorage.setItem('game_startTime', Date.now());
+                let nextPeriod = currentPeriod + 1;
+                localStorage.setItem('game_period', nextPeriod);
+                localStorage.setItem('game_totalBets', 0); // Reset admin bets
+                
+                // Admin Panel ka data check karna
+                let adminP = parseInt(localStorage.getItem('admin_period'));
+                let adminC = parseFloat(localStorage.getItem('admin_crash'));
+                let newCrash = (adminP === nextPeriod && adminC) ? adminC : (Math.random() * 9 + 1.10).toFixed(2);
+                localStorage.setItem('game_crashPoint', newCrash);
+                
+                // Naye round ke liye reset
+                betState = 'none';
+                document.getElementById('btnPlay').className = 'play-btn';
+                document.getElementById('textPlay').innerText = "BET";
+                document.getElementById('btnPlay').disabled = false;
+                
+                addHistory(currentPeriod, crashPt);
+                return;
+            }
+
+            document.getElementById("displayPeriod").innerText = currentPeriod;
+
+            // Phase 1: WAITING (10 Seconds)
+            if (elapsed < 10000) {
+                let timeLeft = Math.ceil((10000 - elapsed) / 1000);
+                document.getElementById('gameStatusText').innerText = "STARTING IN " + timeLeft + "s";
+                document.getElementById('gameStatusText').style.color = "#ffcc00";
+                document.getElementById('liveMultiplier').innerText = "1.00x";
+                document.getElementById('liveMultiplier').style.color = "white";
+                document.getElementById('rocketIcon').classList.remove('flying-animation');
+                document.getElementById('rocketIcon').style.color = "#ff0000";
+                
+                if(betState === 'none') {
+                    document.getElementById('btnPlay').disabled = false;
+                }
+            } 
+            // Phase 2: FLYING
+            else if (elapsed < 10000 + flightTime) {
+                myCurrentMultiplier = 1.00 + ((elapsed - 10000) / 30) * 0.01;
+                document.getElementById('gameStatusText').innerText = "FLYING";
+                document.getElementById('gameStatusText').style.color = "#00e676";
+                document.getElementById('liveMultiplier').innerText = myCurrentMultiplier.toFixed(2) + "x";
+                document.getElementById('liveMultiplier').style.color = "#00d2ff";
+                document.getElementById('rocketIcon').classList.add('flying-animation');
+                
+                // Agar udne se pehle bet nahi lagayi, toh button disable
+                if(betState === 'none') {
+                    document.getElementById('btnPlay').classList.add('btn-disabled');
+                    document.getElementById('textPlay').innerText = "WAIT NEXT";
+                    document.getElementById('btnPlay').disabled = true;
+                }
+            } 
+            // Phase 3: CRASHED
+            else {
+                document.getElementById('gameStatusText').innerText = "CRASHED";
+                document.getElementById('gameStatusText').style.color = "#ff007f";
+                document.getElementById('liveMultiplier').innerText = crashPt.toFixed(2) + "x";
+                document.getElementById('liveMultiplier').style.color = "#ff007f";
+                document.getElementById('rocketIcon').classList.remove('flying-animation');
+                document.getElementById('rocketIcon').style.color = "#555";
+                
+                document.getElementById('btnPlay').classList.add('btn-disabled');
+                document.getElementById('textPlay').innerText = "WAIT NEXT";
+                document.getElementById('btnPlay').disabled = true;
+
+                if (betState === 'placed') {
+                    // Bet doob gayi (Cashed out nahi kiya)
+                    betState = 'cashed_out';
+                }
+            }
+        }
+
+        function handleBet() {
+            let currentBal = parseFloat(localStorage.getItem("userBalance") || 59);
+            let inputAmount = parseFloat(document.getElementById("betAmount").value);
+            
+            let startTime = parseInt(localStorage.getItem('game_startTime'));
+            let elapsed = Date.now() - startTime;
+
+            if (elapsed < 10000) {
+                // Waiting time mein Bet lagana ya Cancel karna
+                if (betState === 'none') {
+                    if (currentBal < inputAmount) { alert("Balance kam hai! Kripya deposit karein."); return; }
+                    
+                    // Bet Place karna aur balance kaatna
+                    currentBal -= inputAmount;
+                    localStorage.setItem("userBalance", currentBal.toFixed(2));
+                    updateBalanceUI();
+                    
+                    // Admin Panel ke liye Total Bets update
+                    let tBets = parseFloat(localStorage.getItem('game_totalBets')) || 0;
+                    localStorage.setItem('game_totalBets', tBets + inputAmount);
+
+                    betValue = inputAmount;
+                    betState = 'placed';
+                    document.getElementById('btnPlay').classList.add('btn-cashout');
+                    document.getElementById('textPlay').innerText = "CANCEL";
+                } else if (betState === 'placed') {
+                    // Bet Cancel karna aur balance wapas jodna
+                    currentBal += betValue;
+                    localStorage.setItem("userBalance", currentBal.toFixed(2));
+                    updateBalanceUI();
+
+                    let tBets = parseFloat(localStorage.getItem('game_totalBets')) || 0;
+                    localStorage.setItem('game_totalBets', tBets - betValue);
+
+                    betState = 'none';
+                    document.getElementById('btnPlay').classList.remove('btn-cashout');
+                    document.getElementById('textPlay').innerText = "BET";
+                }
+            } 
+            else if (elapsed < 10000 + (((parseFloat(localStorage.getItem('game_crashPoint')) - 1) / 0.01) * 30)) {
+                // Flying time mein sirf Cashout ho sakta hai
+                if (betState === 'placed') {
+                    let winAmount = betValue * myCurrentMultiplier;
+                    currentBal += winAmount;
+                    localStorage.setItem("userBalance", currentBal.toFixed(2));
+                    updateBalanceUI();
+                    
+                    alert("Cashout Successful! Aapne jeete ₹" + winAmount.toFixed(2));
+                    betState = 'cashed_out';
+                    
+                    document.getElementById('btnPlay').classList.remove('btn-cashout');
+                    document.getElementById('btnPlay').classList.add('btn-disabled');
+                    document.getElementById('textPlay').innerText = "CASHED OUT";
+                    document.getElementById('btnPlay').disabled = true;
+                }
+            }
+        }
+
+        // History record save karne ka function
+        function addHistory(period, multiplier) {
+            let row = document.getElementById('historyRow');
+            let newItem = document.createElement('div');
+            let isHigh = parseFloat(multiplier) >= 2.00;
+            newItem.className = isHigh ? 'history-item h-crashed' : 'history-item';
+            newItem.innerHTML = `<div class="h-period">${period}</div><div class="h-multiplier">${multiplier.toFixed(2)}x</div>`;
+            row.insertBefore(newItem, row.firstChild);
+            if(row.children.length > 5) row.removeChild(row.lastChild);
+        }
+    </script>
+</body>
+</html>

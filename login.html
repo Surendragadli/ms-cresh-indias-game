@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Cresh - Login & Reset</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(180deg, #020b26 0%, #061845 100%); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { width: 100%; max-width: 400px; }
+        .logo-box { text-align: center; margin-bottom: 15px; position: relative; }
+        .logo-box .main-text { font-size: 50px; font-weight: 900; color: #ffcc00; text-shadow: 2px 2px 0px #000, 0 0 15px rgba(255, 204, 0, 0.6); line-height: 1; font-style: italic; display: inline-block; position: relative; }
+        .logo-box .main-text span { color: #ffffff; text-shadow: 0 0 15px rgba(0, 210, 255, 0.8); }
+        .logo-box .game-text { font-family: 'Great Vibes', cursive; font-size: 35px; color: #ffcc00; text-shadow: 2px 2px 4px #000; margin-top: -15px; }
+        
+        .form-box { background: linear-gradient(180deg, #0a1128, #050813); border: 2px solid #e5b022; border-radius: 20px; padding: 30px 20px; box-shadow: 0 0 20px rgba(229, 176, 34, 0.4), inset 0 0 15px rgba(0, 210, 255, 0.2); position: relative; }
+        .box-heading { text-align: center; color: #00d2ff; font-size: 26px; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px; text-shadow: 0 2px 4px black; }
+        
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #ffffff; font-size: 18px; }
+        .input-group input { width: 100%; background: rgba(4, 15, 38, 0.8); border: 2px solid #00d2ff; border-radius: 12px; padding: 15px 15px 15px 45px; color: white; font-size: 14px; font-weight: bold; outline: none; box-shadow: 0 0 10px rgba(0, 210, 255, 0.3); transition: 0.3s; }
+        .input-group input::placeholder { color: #8da4d0; }
+        
+        .btn-main { width: 100%; background: linear-gradient(90deg, #00d2ff, #0077ff); border: none; border-radius: 12px; padding: 15px; color: white; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4); margin-top: 10px; }
+        .btn-outline { width: 100%; background: rgba(4, 15, 38, 0.8); border: 2px solid #ffcc00; border-radius: 12px; padding: 15px; color: #ffcc00; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 15px; }
+        
+        .forgot-link { text-align: right; color: #ffcc00; font-size: 14px; cursor: pointer; margin-top: -10px; margin-bottom: 15px; text-decoration: underline; font-weight: bold; }
+        .back-link { text-align: center; color: #00d2ff; font-size: 14px; cursor: pointer; margin-top: 20px; font-weight: bold; text-decoration: underline; }
+        
+        #resetFormSection { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-box">
+            <div class="main-text">MS <span>Cresh</span></div>
+            <div class="game-text">Game</div>
+        </div>
+
+        <!-- ================= LOGIN FORM ================= -->
+        <div class="form-box" id="loginFormSection">
+            <div class="box-heading"><i class="fa-solid fa-right-to-bracket"></i> LOGIN</div>
+            <form onsubmit="return loginForm(event)">
+                <div class="input-group">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <input type="tel" id="mobileNumber" placeholder="MOBILE NUMBER" maxlength="10" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" placeholder="PASSWORD" required>
+                </div>
+                <div class="forgot-link" onclick="toggleForms('reset')">Forgot Password?</div>
+                <button type="submit" class="btn-main" id="loginBtn">LOGIN <i class="fa-solid fa-arrow-right"></i></button>
+            </form>
+            <button type="button" class="btn-outline" onclick="window.location.href='skskindex.html'">
+                <i class="fa-solid fa-user-plus"></i> REGISTER 
+            </button>
+        </div>
+
+        <!-- ================= RESET PASSWORD FORM ================= -->
+        <div class="form-box" id="resetFormSection">
+            <div class="box-heading" style="color:#ffcc00;"><i class="fa-solid fa-key"></i> RESET PASSWORD</div>
+            <form onsubmit="return resetPassword(event)">
+                <div class="input-group">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <input type="tel" id="resetMobile" placeholder="YOUR MOBILE NUMBER" maxlength="10" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="newPassword" placeholder="NEW PASSWORD" required>
+                </div>
+                <button type="submit" class="btn-main" id="resetBtn" style="background: linear-gradient(90deg, #ffcc00, #ff9900); color:black;">
+                    UPDATE PASSWORD
+                </button>
+            </form>
+            <div class="back-link" onclick="toggleForms('login')"><i class="fa-solid fa-arrow-left"></i> Back to Login</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleForms(type) {
+            if (type === 'reset') {
+                document.getElementById("loginFormSection").style.display = "none";
+                document.getElementById("resetFormSection").style.display = "block";
+            } else {
+                document.getElementById("resetFormSection").style.display = "none";
+                document.getElementById("loginFormSection").style.display = "block";
+            }
+        }
+
+        // ================= LOGIN API =================
+        async function loginForm(event) {
+            event.preventDefault();
+            var mobile = document.getElementById("mobileNumber").value;
+            var password = document.getElementById("password").value;
+            var loginBtn = document.getElementById("loginBtn");
+
+            loginBtn.innerText = "WAIT...";
+            loginBtn.disabled = true;
+
+            try {
+                let response = await fetch("http://localhost:5002/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mobile: mobile, password: password })
+                });
+                let result = await response.json();
+
+                if (result.success) {
+                    localStorage.setItem("savedMobile", result.mobile);
+                    localStorage.setItem("userBalance", result.balance);
+                    // Naye Home Page par redirect
+                    window.location.href = "skuskeskkkloginhome.html"; 
+                } else {
+                    alert("❌ " + result.message); 
+                    loginBtn.innerHTML = 'LOGIN <i class="fa-solid fa-arrow-right"></i>';
+                    loginBtn.disabled = false;
+                }
+            } catch (error) {
+                alert("❌ Server Error!");
+                loginBtn.disabled = false;
+            }
+        }
+
+        // ================= RESET PASSWORD API =================
+        async function resetPassword(event) {
+            event.preventDefault();
+            var mobile = document.getElementById("resetMobile").value;
+            var newPassword = document.getElementById("newPassword").value;
+            var resetBtn = document.getElementById("resetBtn");
+
+            resetBtn.innerText = "UPDATING...";
+            resetBtn.disabled = true;
+
+            try {
+                let response = await fetch("http://localhost:5002/reset-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mobile: mobile, newPassword: newPassword })
+                });
+                let result = await response.json();
+
+                if (result.success) {
+                    alert("✅ " + result.message);
+                    toggleForms('login');
+                    document.getElementById("password").value = ""; 
+                } else {
+                    alert("❌ " + result.message); 
+                }
+                resetBtn.innerText = "UPDATE PASSWORD";
+                resetBtn.disabled = false;
+            } catch (error) {
+                alert("❌ Server Error!");
+                resetBtn.innerText = "UPDATE PASSWORD";
+                resetBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

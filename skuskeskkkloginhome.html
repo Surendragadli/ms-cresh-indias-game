@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Cresh - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { 
+            background: #020617; 
+            color: white; 
+            min-height: 100vh;
+            padding-bottom: 80px; /* Bottom nav ke liye space */
+        }
+        
+        /* HEADER - Logo & Balance */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(180deg, #0a1128, transparent);
+        }
+        .logo { font-size: 28px; font-weight: 900; color: #ffcc00; text-shadow: 2px 2px 0px #000; font-style: italic; display: flex; align-items: center; gap: 5px; }
+        .logo i { font-size: 22px; margin-top: -10px; }
+        .logo span { color: #fff; }
+        
+        .balance-box {
+            display: flex;
+            align-items: center;
+            background: #1e1b4b;
+            border: 2px solid #ffcc00;
+            border-radius: 25px;
+            padding: 5px 5px 5px 15px;
+            gap: 10px;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+        }
+        .balance-box .wallet-icon { color: #ffcc00; font-size: 20px; }
+        .balance-text { font-size: 10px; color: #cbd5e1; line-height: 1.2; }
+        .balance-amount { font-size: 14px; font-weight: 800; color: #ffcc00; }
+        .add-btn {
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 0 5px #ffcc00;
+        }
+
+        /* MAIN HERO BANNER (Crash Game) */
+        .hero-banner {
+            margin: 15px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #1e1b4b, #0f172a);
+            border: 2px solid #3b82f6;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            text-align: left;
+        }
+        .vip-badge {
+            display: inline-block;
+            background: #ffcc00;
+            color: #000;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            border: 2px solid #fff;
+        }
+        .hero-banner h1 {
+            font-size: 38px;
+            font-weight: 900;
+            color: #ffcc00;
+            line-height: 1;
+            font-style: italic;
+            text-shadow: 2px 2px 4px #000;
+        }
+        .hero-banner h1 span { color: #fff; font-size: 45px; }
+        .hero-banner p {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+        }
+        .play-btn {
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .rocket-img {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            font-size: 120px;
+            color: #ffcc00;
+            transform: rotate(45deg);
+            opacity: 0.8;
+            filter: drop-shadow(0 0 10px #ff9900);
+        }
+
+        /* 4 GAME GRID */
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+        .game-card {
+            background: linear-gradient(180deg, #1e1b4b, #0f172a);
+            border: 2px solid #a855f7;
+            border-radius: 15px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .game-card:hover { transform: scale(1.05); }
+        .game-card i { font-size: 40px; color: #ffcc00; margin-bottom: 10px; filter: drop-shadow(0 0 5px #ffcc00); }
+        .game-card h3 { font-size: 14px; font-weight: 800; color: #fff; line-height: 1.2; }
+        .game-card .sub-text { font-size: 10px; color: #94a3b8; }
+
+        /* FEATURES SECTION */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+        .feature-box {
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid #3b82f6;
+            border-radius: 10px;
+            padding: 10px 5px;
+            text-align: center;
+        }
+        .feature-box i { color: #ffcc00; font-size: 18px; margin-bottom: 5px; }
+        .feature-box p { font-size: 9px; font-weight: 700; color: #e2e8f0; line-height: 1.2; }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(2, 6, 23, 0.95);
+            border-top: 1px solid #3b82f6;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: #d946ef; text-shadow: 0 0 10px rgba(217, 70, 239, 0.8); }
+        .nav-item.active::after {
+            content: '';
+            width: 30px;
+            height: 3px;
+            background: #d946ef;
+            margin-top: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #d946ef;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <i class="fa-solid fa-crown"></i>
+            MS <span>Win</span>
+        </div>
+        <div class="balance-box">
+            <i class="fa-solid fa-wallet wallet-icon"></i>
+            <div class="balance-text">
+                Balance<br>
+                <span class="balance-amount" id="displayBalance">₹ 0.00</span>
+            </div>
+            <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <i class="fa-solid fa-rocket rocket-img"></i>
+        <div class="vip-badge"><i class="fa-solid fa-crown"></i> VIP LEVEL</div>
+        <h1>MS Win<br><span>PLAY</span></h1>
+        <p>Crash Game • Bigger Wins • More Fun</p>
+        <button class="play-btn" onclick="window.location.href='game.html'">
+            PLAY NOW <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- Game Cards -->
+    <div class="game-grid">
+        <div class="game-card" style="border-color: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);" onclick="window.location.href='game.html'">
+            <i class="fa-solid fa-star"></i>
+            <h3>Ms Cresh Win</h3>
+            <span class="sub-text">Crash Game</span>
+        </div>
+        <div class="game-card" style="border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);">
+            <i class="fa-solid fa-coins"></i>
+            <h3>Ms Coin</h3>
+            <span class="sub-text">Multiplier</span>
+        </div>
+        <div class="game-card" style="border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);">
+            <i class="fa-solid fa-cubes"></i>
+            <h3>Ms Colour</h3>
+            <span class="sub-text">Choice Game</span>
+        </div>
+        <div class="game-card" style="border-color: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);">
+            <i class="fa-solid fa-dice"></i>
+            <h3>Ms No.</h3>
+            <span class="sub-text">Choice Game</span>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features-grid">
+        <div class="feature-box">
+            <i class="fa-solid fa-shield-halved"></i>
+            <p>100%<br>Secure</p>
+        </div>
+        <div class="feature-box">
+            <i class="fa-solid fa-bolt"></i>
+            <p>Fast<br>Withdrawal</p>
+        </div>
+        <div class="feature-box">
+            <i class="fa-solid fa-headset"></i>
+            <p>24x7<br>Support</p>
+        </div>
+        <div class="feature-box">
+            <i class="fa-solid fa-gift"></i>
+            <p>Exciting<br>Rewards</p>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Saare links updated hain) -->
+    <div class="bottom-nav">
+        <!-- Home Button (Active) -->
+        <a href="skuskeskkkloginhome.html" class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            Home
+        </a>
+        
+        <!-- Daily Rewards Button -->
+        <a href="skuskeskkkdailyrewards.html" class="nav-item">
+            <i class="fa-solid fa-calendar-check"></i>
+            Daily Rewards
+        </a>
+        
+        <!-- Refer & Earn Button -->
+        <a href="sonusonumonufriendreferandearn.html" class="nav-item">
+            <i class="fa-solid fa-users"></i>
+            Refer & Earn
+        </a>
+        
+        <!-- Account Button -->
+        <a href="skkmunsiansihaasiaccount.html" class="nav-item">
+            <i class="fa-solid fa-user-gear"></i>
+            Account
+        </a>
+    </div>
+
+    <script>
+        // Login API se jo balance mila tha, usko top par dikhana
+        window.onload = function() {
+            let balance = localStorage.getItem("userBalance");
+            if(balance) {
+                document.getElementById("displayBalance").innerText = "₹ " + parseFloat(balance).toFixed(2);
+            } else {
+                // Agar user login nahi hai toh usko wapas login pe bhej do
+                window.location.href = "login.html";
+            }
+        };
+    </script>
+</body>
+</html>

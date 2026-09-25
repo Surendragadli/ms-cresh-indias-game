@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Cresh - Refer & Earn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { 
+            background: #020617; 
+            color: white; 
+            min-height: 100vh;
+            padding-bottom: 80px; 
+            background-image: radial-gradient(circle at top, #1e1b4b 0%, #020617 100%);
+        }
+        
+        /* HEADER */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(180deg, #1e1b4b, transparent);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .back-btn {
+            background: #4c1d95;
+            border: 2px solid #8b5cf6;
+            color: white;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 18px; cursor: pointer;
+            text-decoration: none;
+        }
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* REFERRAL LINK BOX (Mobile number ke hisab se) */
+        .referral-box {
+            margin: 15px;
+            background: linear-gradient(90deg, #1e1b4b, #0f172a);
+            border: 2px solid #ffcc00;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+        .referral-box h3 { font-size: 14px; color: #fff; margin-bottom: 5px; }
+        .referral-box p { font-size: 11px; color: #00d2ff; margin-bottom: 15px; font-weight: bold; }
+        .link-container {
+            display: flex;
+            background: #020617;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .link-container input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            font-size: 12px;
+            outline: none;
+        }
+        .copy-btn {
+            background: linear-gradient(90deg, #00d2ff, #0077ff);
+            border: none;
+            color: white;
+            padding: 0 15px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        /* NOTICE BANNER */
+        .notice-banner {
+            margin: 15px;
+            background: linear-gradient(90deg, #312e81, #1e1b4b);
+            border-left: 4px solid #ffcc00;
+            padding: 10px;
+            font-size: 10px;
+            color: #fff;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .notice-banner i { color: #ffcc00; font-size: 20px; }
+
+        /* TABLES */
+        .table-container { margin: 15px; border-radius: 10px; overflow: hidden; border: 2px solid #fff; }
+        table { width: 100%; border-collapse: collapse; text-align: center; background: #fff; color: #000; }
+        th { background: #ffcc00; color: #000; padding: 10px; font-size: 12px; font-weight: 900; }
+        td { padding: 10px; font-size: 13px; font-weight: 700; border-bottom: 1px solid #ccc; }
+        tr:last-child td { border-bottom: none; }
+        .td-amount { color: #2563eb; }
+        .td-bonus { color: #dc2626; }
+
+        /* RULE SECTION */
+        .rules-section, .instructions-section {
+            margin: 15px;
+            background: #0a0f24;
+            border: 1px solid #3b82f6;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+        .section-title {
+            color: #ffcc00;
+            font-size: 16px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .rule-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .rule-list li {
+            font-size: 10px;
+            color: #cbd5e1;
+            display: flex;
+            gap: 10px;
+            line-height: 1.4;
+        }
+        .rule-list li span {
+            background: #ffcc00;
+            color: #000;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 10px;
+        }
+
+        /* YOUTUBE SECTION */
+        .youtube-banner {
+            margin: 15px;
+            background: linear-gradient(45deg, #7f1d1d, #dc2626);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #fca5a5;
+        }
+        .youtube-banner h2 { font-size: 24px; font-weight: 900; color: #fff; text-shadow: 2px 2px 0px #000; }
+        .youtube-banner p { font-size: 12px; color: #ffcc00; font-weight: 800; }
+
+        /* TELEGRAM BUTTON */
+        .telegram-btn {
+            margin: 15px;
+            background: linear-gradient(90deg, #0088cc, #005580);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; width: 100%;
+            background: rgba(2, 6, 23, 0.95);
+            border-top: 1px solid #3b82f6;
+            display: flex; justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center; color: #94a3b8; text-decoration: none;
+            font-size: 11px; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: #d946ef; text-shadow: 0 0 10px rgba(217, 70, 239, 0.8); }
+        .nav-item.active::after {
+            content: ''; width: 30px; height: 3px; background: #d946ef;
+            margin-top: 5px; border-radius: 5px; box-shadow: 0 0 10px #d946ef;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <a href="skuskeskkkloginhome.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="header-title"><i class="fa-solid fa-bullhorn"></i> REFER & EARN</div>
+    </div>
+
+    <!-- Referral Link Generation Section -->
+    <div class="referral-box">
+        <h3>Invite friends and Deposit to get additional platform rewards!</h3>
+        <p>★ Get 0.3% Lifetime Commission on Friends' Bets ★</p>
+        <div class="link-container">
+            <input type="text" id="inviteLink" readonly value="Loading link...">
+            <button class="copy-btn" onclick="copyInviteLink()">COPY</button>
+        </div>
+    </div>
+
+    <!-- Notice Banner -->
+    <div class="notice-banner">
+        <i class="fa-solid fa-bolt"></i>
+        After being claimed, the rewards will be directly distributed to the wallet balance within 10 minutes.
+    </div>
+
+    <!-- Main Table -->
+    <div class="table-container">
+        <table>
+            <tr>
+                <th><i class="fa-solid fa-users"></i> Invite account</th>
+                <th><i class="fa-solid fa-wallet"></i> Deposit amt.</th>
+                <th><i class="fa-solid fa-gift"></i> Bonus</th>
+            </tr>
+            <tr>
+                <td>1 people</td>
+                <td class="td-amount">₹300.00</td>
+                <td class="td-bonus">₹37.00</td>
+            </tr>
+            <tr>
+                <td>3 people</td>
+                <td class="td-amount">₹300.00</td>
+                <td class="td-bonus">₹107.00</td>
+            </tr>
+            <tr>
+                <td>10 people</td>
+                <td class="td-amount">₹500.00</td>
+                <td class="td-bonus">₹307.00</td>
+            </tr>
+            <tr>
+                <td>30 people</td>
+                <td class="td-amount">₹800.00</td>
+                <td class="td-bonus">₹577.00</td>
+            </tr>
+            <tr>
+                <td>50 people</td>
+                <td class="td-amount">₹1,000.00</td>
+                <td class="td-bonus">₹877.00</td>
+            </tr>
+            <tr>
+                <td>75 people</td>
+                <td class="td-amount">₹1,100.00</td>
+                <td class="td-bonus">₹2,177.00</td>
+            </tr>
+            <tr>
+                <td>100 people</td>
+                <td class="td-amount">₹1,200.00</td>
+                <td class="td-bonus">₹3,777.00</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Rules Section -->
+    <div class="rules-section">
+        <div class="section-title">RULE <i class="fa-solid fa-arrow-right"></i></div>
+        <ul class="rule-list">
+            <li><span>1</span> Only when the number of invited accounts is reached and each account can meet the Deposit amount can you receive the bonus.</li>
+            <li><span>2</span> The invitation account meets the requirements, but the Deposit amount of the account does not meet the requirements, and the bonus cannot be claimed.</li>
+            <li><span>3</span> Please claim the event bonus within the event period. All bonuses will be cleared after the event expires.</li>
+            <li><span>4</span> Please complete the task within the event period. After the event expires, the invitation record will be cleared.</li>
+        </ul>
+    </div>
+
+    <!-- Youtube Section -->
+    <div class="youtube-banner">
+        <h2><i class="fa-brands fa-youtube"></i> YOUTUBE</h2>
+        <p>CREATIVE VIDEOS - EARN BONUSES</p>
+    </div>
+
+    <!-- Youtube Table -->
+    <div class="table-container">
+        <table>
+            <tr>
+                <th style="background:#dc2626;"><i class="fa-solid fa-eye"></i> Play (Views)</th>
+                <th style="background:#dc2626;"><i class="fa-solid fa-coins"></i> Income</th>
+            </tr>
+            <tr>
+                <td>1000+</td>
+                <td class="td-bonus">₹388</td>
+            </tr>
+            <tr>
+                <td>2500+</td>
+                <td class="td-bonus">₹588</td>
+            </tr>
+            <tr>
+                <td>5000+</td>
+                <td class="td-bonus">₹788</td>
+            </tr>
+            <tr>
+                <td>10000+</td>
+                <td class="td-bonus">₹1088</td>
+            </tr>
+            <tr>
+                <td>100000+</td>
+                <td class="td-bonus">₹25888</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Telegram Link -->
+    <div class="telegram-btn" onclick="window.location.href='https://t.me/Skynovaa1_bot'">
+        <i class="fa-brands fa-telegram"></i> Join Telegram @Skynovaa1_bot
+    </div>
+
+    <!-- Instructions Section -->
+    <div class="instructions-section">
+        <div class="section-title"><i class="fa-solid fa-file-lines"></i> Instructions</div>
+        <ul class="rule-list">
+            <li><span>1</span> You should contact your agent before you start to provide your video link.</li>
+            <li><span>2</span> Each member can claim this bonus when the view requirement is met.</li>
+            <li><span>3</span> Your subordinates should not use the same bank details and same IP. Once detected, you will lose eligibility.</li>
+            <li><span>4</span> To ensure the safety of both parties, the platform has the right to request valid identification.</li>
+            <li><span>5</span> By participating in this event, you agree to these terms and conditions.</li>
+        </ul>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="skuskeskkkloginhome.html" class="nav-item">
+            <i class="fa-solid fa-house"></i> Home
+        </a>
+        <a href="skuskeskkkdailyrewards.html" class="nav-item">
+            <i class="fa-solid fa-calendar-check"></i> Daily Rewards
+        </a>
+        <a href="sonusonumonureferandearn.html" class="nav-item active">
+            <i class="fa-solid fa-users"></i> Refer & Earn
+        </a>
+        <a href="skkmunsiansihaasiaccount.html" class="nav-item">
+            <i class="fa-solid fa-user-gear"></i> Account
+        </a>
+    </div>
+
+    <script>
+        // User ka mobile number nikal kar Invite Link banana
+        window.onload = function() {
+            let mobile = localStorage.getItem("savedMobile");
+            let inviteInput = document.getElementById("inviteLink");
+            
+            if(mobile && mobile.length >= 3) {
+                // Sirf mobile number ke last 3 digits nikalna
+                let inviteCode = mobile.substring(mobile.length - 3); 
+                
+                // Naya link jisme sirf last 3 digit as a refcode honge
+                let currentURL = window.location.origin;
+                let finalLink = currentURL + "/skskindex.html?refcode=" + inviteCode;
+                inviteInput.value = finalLink;
+            } else {
+                inviteInput.value = "Please login first to get your invite link.";
+            }
+        };
+
+        // Copy button function
+        function copyInviteLink() {
+            let copyText = document.getElementById("inviteLink");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Mobile devices ke liye
+            navigator.clipboard.writeText(copyText.value);
+            
+            alert("✅ Invite Link Copied Successfully!");
+        }
+    </script>
+</body>
+</html>

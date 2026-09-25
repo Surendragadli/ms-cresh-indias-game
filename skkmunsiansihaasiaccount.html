@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Cresh - Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { 
+            background: #020617; 
+            color: white; 
+            min-height: 100vh;
+            padding-bottom: 80px; 
+            background-image: radial-gradient(circle at top, #1e1b4b 0%, #020617 100%);
+        }
+        
+        /* HEADER */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: transparent;
+            position: relative;
+        }
+        .back-btn {
+            background: #4c1d95;
+            border: 2px solid #8b5cf6;
+            color: white;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 18px; cursor: pointer;
+            text-decoration: none;
+            z-index: 10;
+        }
+        .header-logo {
+            text-align: center;
+            position: absolute;
+            left: 0; right: 0;
+            top: 10px;
+        }
+        .header-logo .main-text {
+            font-size: 32px; font-weight: 900; color: #ffcc00;
+            text-shadow: 2px 2px 0px #000, 0 0 15px rgba(255, 204, 0, 0.6);
+            line-height: 1; font-style: italic; display: inline-block;
+        }
+        .header-logo .main-text span { color: #ffffff; text-shadow: 0 0 15px rgba(0, 210, 255, 0.8); }
+        .header-logo .game-text {
+            font-family: 'Great Vibes', cursive; font-size: 20px; color: #ffcc00;
+            text-shadow: 2px 2px 4px #000; margin-top: -5px;
+        }
+        .play-win-text {
+            font-family: 'Great Vibes', cursive;
+            color: #fff; text-align: center;
+            font-size: 18px; line-height: 1;
+            margin-right: 10px; z-index: 10;
+        }
+        .play-win-text span { color: #ffcc00; font-size: 22px; }
+
+        /* PROFILE SECTION */
+        .profile-card {
+            margin: 40px 15px 15px 15px;
+            background: linear-gradient(90deg, #1e1b4b, #0f172a);
+            border: 1px solid #8b5cf6;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+            position: relative;
+        }
+        .avatar-box {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+            border: 3px solid #ffcc00;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 35px; color: white;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+            position: relative;
+        }
+        .avatar-box .crown {
+            position: absolute; bottom: -5px; right: -5px;
+            color: #ffcc00; font-size: 20px; text-shadow: 1px 1px 2px #000;
+        }
+        .user-info { flex-grow: 1; }
+        .user-info p { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+        .id-box {
+            display: flex;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 5px 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .id-box span { font-size: 12px; font-weight: bold; color: #e2e8f0; }
+        .id-box i { color: #94a3b8; cursor: pointer; }
+
+        /* ACTION BUTTONS (Row 1) */
+        .action-row-1 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+        .action-btn {
+            border-radius: 12px;
+            padding: 15px 5px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            font-size: 12px; font-weight: 800;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+        .btn-deposit { background: linear-gradient(135deg, #a855f7, #d946ef); box-shadow: 0 0 15px rgba(217, 70, 239, 0.4); }
+        .btn-withdraw { background: linear-gradient(135deg, #0ea5e9, #2563eb); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
+        .btn-telegram { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .action-btn i.main-icon { font-size: 24px; margin-bottom: 5px; }
+        .action-btn .arrow-icon { font-size: 10px; opacity: 0.7; }
+
+        /* MAIN MENU (Row 2) */
+        .main-menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 0 15px;
+            margin-bottom: 25px;
+        }
+        .menu-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #3b82f6;
+            border-radius: 15px;
+            padding: 20px 5px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+            cursor: pointer;
+        }
+        .menu-card img, .menu-card i.big-icon { font-size: 40px; margin-bottom: 10px; }
+        .icon-support { color: #a855f7; text-shadow: 0 0 10px #a855f7; }
+        .icon-gift { color: #ef4444; text-shadow: 0 0 10px #ef4444; }
+        .icon-lang { color: #3b82f6; text-shadow: 0 0 10px #3b82f6; }
+        .menu-card h4 { font-size: 10px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; }
+        .menu-card .arrow-circle {
+            width: 20px; height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 10px;
+        }
+
+        /* LOGOUT BUTTON */
+        .logout-container { padding: 0 15px; margin-bottom: 30px; }
+        .logout-btn {
+            width: 100%;
+            background: rgba(220, 38, 38, 0.1);
+            border: 2px solid #ef4444;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.2), 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+        .logout-btn i { color: #ef4444; font-size: 20px; }
+
+        /* LANGUAGE MODAL */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 2000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .modal-box {
+            background: #0f172a; border: 2px solid #3b82f6;
+            border-radius: 15px; padding: 20px; width: 80%; max-width: 300px;
+            text-align: center; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .modal-box h3 { color: #ffcc00; margin-bottom: 20px; font-weight: 900; }
+        .lang-option {
+            background: #1e293b; border: 1px solid #64748b;
+            padding: 12px; margin-bottom: 10px; border-radius: 8px;
+            color: white; font-weight: bold; cursor: pointer;
+        }
+        .lang-option.active { border-color: #00d2ff; background: rgba(0, 210, 255, 0.1); color: #00d2ff; }
+        .close-modal {
+            background: #ef4444; border: none; color: white;
+            padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; width: 100%;
+            background: rgba(2, 6, 23, 0.95);
+            border-top: 1px solid #3b82f6;
+            display: flex; justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center; color: #94a3b8; text-decoration: none;
+            font-size: 11px; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: #d946ef; text-shadow: 0 0 10px rgba(217, 70, 239, 0.8); }
+        .nav-item.active::after {
+            content: ''; width: 30px; height: 3px; background: #d946ef;
+            margin-top: 5px; border-radius: 5px; box-shadow: 0 0 10px #d946ef;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <a href="skuskeskkkloginhome.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="header-logo">
+            <i class="fa-solid fa-crown" style="color: #ffcc00; font-size: 20px; position: absolute; top: -15px; left: 50%; transform: translateX(-50%);"></i>
+            <div class="main-text">MS <span>CRESH</span></div>
+            <div class="game-text">GAME</div>
+        </div>
+        <div class="play-win-text">
+            Play<br>Win<br><span>Big</span>
+        </div>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+        <div class="avatar-box">
+            <i class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-crown crown"></i>
+        </div>
+        <div class="user-info">
+            <p>User ID</p>
+            <div class="id-box">
+                <i class="fa-solid fa-user" style="font-size: 10px; color: #e2e8f0;"></i>
+                <span id="displayUserId">Loading...</span>
+                <i class="fa-solid fa-copy" onclick="copyUserID()"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Row 1 -->
+    <div class="action-row-1">
+        <div class="action-btn btn-deposit" onclick="alert('Deposit Page Comming Soon')">
+            <i class="fa-solid fa-wallet main-icon"></i>
+            <div>Deposit <i class="fa-solid fa-chevron-right arrow-icon"></i></div>
+        </div>
+        <div class="action-btn btn-withdraw" onclick="alert('Withdraw Page Comming Soon')">
+            <i class="fa-solid fa-money-bill-transfer main-icon"></i>
+            <div>Withdrawal <i class="fa-solid fa-chevron-right arrow-icon"></i></div>
+        </div>
+        
+        <!-- TELEGRAM LINK FIXED -->
+        <a href="https://t.me/mscresh" target="_blank" class="action-btn btn-telegram">
+            <i class="fa-brands fa-telegram main-icon"></i>
+            <div>Telegram <i class="fa-solid fa-chevron-right arrow-icon"></i></div>
+        </a>
+    </div>
+
+    <!-- Main Menu Grid (Row 2) -->
+    <div class="main-menu-grid">
+        
+        <!-- SUPPORT LINK FIXED -->
+        <a href="https://t.me/Skynovaa1_bot" target="_blank" class="menu-card">
+            <i class="fa-solid fa-headset big-icon icon-support"></i>
+            <h4>SUPPORT</h4>
+            <div class="arrow-circle"><i class="fa-solid fa-chevron-right"></i></div>
+        </a>
+        
+        <div class="menu-card" onclick="alert('Gift Exchange Comming Soon')">
+            <i class="fa-solid fa-gift big-icon icon-gift"></i>
+            <h4>GIFT EXCHANGE</h4>
+            <div class="arrow-circle"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+        <div class="menu-card" onclick="openLangModal()">
+            <i class="fa-solid fa-language big-icon icon-lang"></i>
+            <h4>BHASHA</h4>
+            <div class="arrow-circle"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="logout-container">
+        <button class="logout-btn" onclick="logoutUser()">
+            <i class="fa-solid fa-right-from-bracket"></i> LOG OUT
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="skuskeskkkloginhome.html" class="nav-item">
+            <i class="fa-solid fa-house"></i> Home
+        </a>
+        <a href="skuskeskkkdailyrewards.html" class="nav-item">
+            <i class="fa-solid fa-calendar-check"></i> Daily Rewards
+        </a>
+        <a href="sonusonumonufriendreferandearn.html" class="nav-item">
+            <i class="fa-solid fa-users"></i> Refer & Earn
+        </a>
+        <a href="skkmunsiansihaasiaccount.html" class="nav-item active">
+            <i class="fa-solid fa-user-gear"></i> Account
+        </a>
+    </div>
+
+    <!-- Language Modal Box -->
+    <div class="modal-overlay" id="langModal">
+        <div class="modal-box">
+            <h3><i class="fa-solid fa-language"></i> Select Bhasha</h3>
+            <div class="lang-option active" onclick="selectLang(this)">English</div>
+            <div class="lang-option" onclick="selectLang(this)">Hindi (हिंदी)</div>
+            <button class="close-modal" onclick="closeLangModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Set User ID from Local Storage
+        window.onload = function() {
+            let mobile = localStorage.getItem("savedMobile");
+            if(mobile) {
+                document.getElementById("displayUserId").innerText = mobile;
+            } else {
+                window.location.href = "login.html"; // Agar login nahi hai toh wapas bhej do
+            }
+        };
+
+        // Copy User ID
+        function copyUserID() {
+            let text = document.getElementById("displayUserId").innerText;
+            navigator.clipboard.writeText(text);
+            alert("✅ User ID Copied!");
+        }
+
+        // Language Modal Logic
+        function openLangModal() { document.getElementById("langModal").style.display = "flex"; }
+        function closeLangModal() { document.getElementById("langModal").style.display = "none"; }
+        
+        function selectLang(element) {
+            let options = document.querySelectorAll(".lang-option");
+            options.forEach(opt => opt.classList.remove("active"));
+            element.classList.add("active");
+            
+            setTimeout(() => {
+                alert("Language changed to " + element.innerText);
+                closeLangModal();
+            }, 300);
+        }
+
+        // Logout Logic
+        function logoutUser() {
+            let confirmLogout = confirm("Are you sure you want to log out?");
+            if(confirmLogout) {
+                // LocalStorage se details delete kardo
+                localStorage.removeItem("savedMobile");
+                localStorage.removeItem("userBalance");
+                // Wapas Login page par bhej do
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+</html>

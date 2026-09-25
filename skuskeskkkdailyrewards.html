@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Cresh - Daily Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { 
+            background: #020617; 
+            color: white; 
+            min-height: 100vh;
+            padding-bottom: 80px; 
+            background-image: radial-gradient(circle at top, #1e1b4b 0%, #020617 100%);
+        }
+        
+        /* HEADER */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(180deg, #1e1b4b, transparent);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .back-btn {
+            background: #4c1d95;
+            border: 2px solid #8b5cf6;
+            color: white;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 18px; cursor: pointer;
+            text-decoration: none;
+        }
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* NOTICE BOARD */
+        .notice-board {
+            margin: 15px;
+            background: linear-gradient(90deg, #1e1b4b, #0f172a);
+            border: 1px solid #3b82f6;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+        .notice-board i.fa-bullhorn { font-size: 30px; color: #ffcc00; transform: rotate(-20deg); }
+        .notice-text h4 { color: #ffcc00; font-size: 14px; margin-bottom: 5px; }
+        .notice-text p { font-size: 10px; color: #cbd5e1; line-height: 1.3; }
+        
+        /* SECTION TITLE */
+        .section-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin: 20px 0 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .section-title::before, .section-title::after {
+            content: '';
+            height: 2px;
+            width: 50px;
+            background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+        }
+
+        /* EVENTS LIST */
+        .event-list { padding: 0 15px; display: flex; flex-direction: column; gap: 10px; }
+        
+        .event-card {
+            background: linear-gradient(90deg, rgba(30,27,75,0.8), rgba(15,23,42,0.9));
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* ICONS STYLES */
+        .icon-box {
+            min-width: 50px; height: 50px;
+            border-radius: 10px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .icon-crash { background: linear-gradient(135deg, #ef4444, #b91c1c); border: 2px solid #fca5a5; }
+        .icon-refer { background: linear-gradient(135deg, #3b82f6, #1d4ed8); border: 2px solid #93c5fd; }
+        .icon-deposit { background: linear-gradient(135deg, #a855f7, #7e22ce); border: 2px solid #d8b4fe; }
+        .icon-coin { background: linear-gradient(135deg, #f59e0b, #b45309); border: 2px solid #fde68a; }
+        .icon-colour { background: linear-gradient(135deg, #0ea5e9, #0369a1); border: 2px solid #7dd3fc; }
+        .icon-number { background: linear-gradient(135deg, #10b981, #047857); border: 2px solid #6ee7b7; }
+        
+        .event-details { flex-grow: 1; }
+        .event-details h3 { font-size: 11px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 3px; }
+        .event-details h3 span { color: #ffcc00; } 
+        .event-details p { font-size: 9px; color: #94a3b8; }
+        
+        .go-btn {
+            background: linear-gradient(90deg, #a855f7, #d946ef);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+            display: flex; align-items: center; gap: 5px;
+            white-space: nowrap;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; width: 100%;
+            background: rgba(2, 6, 23, 0.95);
+            border-top: 1px solid #3b82f6;
+            display: flex; justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center; color: #94a3b8; text-decoration: none;
+            font-size: 11px; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: #d946ef; text-shadow: 0 0 10px rgba(217, 70, 239, 0.8); }
+        .nav-item.active::after {
+            content: ''; width: 30px; height: 3px; background: #d946ef;
+            margin-top: 5px; border-radius: 5px; box-shadow: 0 0 10px #d946ef;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <a href="skuskeskkkloginhome.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="header-title"><i class="fa-solid fa-crown"></i> MS CRESH DAILY EVENTS <i class="fa-solid fa-rocket" style="color:white; font-size: 18px;"></i></div>
+    </div>
+
+    <!-- Notice Board -->
+    <div class="notice-board">
+        <i class="fa-solid fa-bullhorn"></i>
+        <div class="notice-text">
+            <h4>Daily/Weekly Events -</h4>
+            <p>★ Complete weekly/daily tasks to earn generous rewards<br>★ Weekly rewards cannot carry over to the next week, daily rewards cannot accumulate to the next day.</p>
+        </div>
+    </div>
+
+    <div class="section-title">Events</div>
+
+    <!-- Events List -->
+    <div class="event-list">
+        
+        <!-- 1. Crash Weekly Bet 50,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-crash"><i class="fa-solid fa-crown"></i></div>
+            <div class="event-details">
+                <h3>Ms Cresh Weekly Bet Bons <span class="crash-progress">0</span>/50000</h3>
+                <p>(Bet ₹50000 on ms cresh Weekly to receive a ₹50 bons)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='game.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 2. Crash Weekly Bet 100,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-crash"><i class="fa-solid fa-crown"></i></div>
+            <div class="event-details">
+                <h3>Ms Cresh Weekly Bet Bons <span class="crash-progress">0</span>/100000</h3>
+                <p>(Bet ₹100000 on ms cresh Weekly to receive a ₹107 bons)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='game.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 3. Refer 1 Friend -->
+        <div class="event-card">
+            <div class="icon-box icon-refer"><i class="fa-solid fa-user-plus"></i></div>
+            <div class="event-details">
+                <h3>Ms Cresh Refer 1 Friend</h3>
+                <p>(Invite 1 friend and get ₹20 bonus)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='sonusonumonureferandearn.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 4. Refer 10 Friends -->
+        <div class="event-card">
+            <div class="icon-box icon-refer"><i class="fa-solid fa-users"></i></div>
+            <div class="event-details">
+                <h3>Ms Cresh weekly Refer 10 Friend</h3>
+                <p>(Invite 10 friend and get ₹200 bonus)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='sonusonumonureferandearn.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 5. Deposit 500 -->
+        <div class="event-card">
+            <div class="icon-box icon-deposit"><i class="fa-solid fa-wallet"></i></div>
+            <div class="event-details">
+                <h3>Ms Cresh Deposit ₹ 500</h3>
+                <p>(Make a deposit of ₹500 and get ₹50 bonus)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='munsiansihaasiaccount.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 6. Deposit 1000 -->
+        <div class="event-card">
+            <div class="icon-box icon-deposit"><i class="fa-solid fa-wallet"></i></div>
+            <div class="event-details">
+                <h3>Ms Cresh Deposit ₹ 1000</h3>
+                <p>(Make a deposit of ₹1000 and get ₹100 bonus)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='munsiansihaasiaccount.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 7. Deposit 2000 -->
+        <div class="event-card">
+            <div class="icon-box icon-deposit"><i class="fa-solid fa-wallet"></i></div>
+            <div class="event-details">
+                <h3>Ms Cresh Deposit ₹ 2000</h3>
+                <p>(Make a deposit of ₹2000 and get ₹150 bonus)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='munsiansihaasiaccount.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 8. Coin Multiplier 60,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-coin"><i class="fa-solid fa-coins"></i></div>
+            <div class="event-details">
+                <h3>Ms Coin Multipler 0/60000</h3>
+                <p>(Bet ₹60000 on ms cresh Weekly to receive a ₹70 bons)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='game.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 9. Coin Multiplier 100,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-coin"><i class="fa-solid fa-coins"></i></div>
+            <div class="event-details">
+                <h3>Ms Coin Multipler 0/100000</h3>
+                <p>(Bet ₹100000 on ms cresh Weekly to receive a ₹135 bons)</p>
+            </div>
+            <button class="go-btn" onclick="window.location.href='game.html'">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 10. Colour Choice 55,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-colour"><i class="fa-solid fa-palette"></i></div>
+            <div class="event-details">
+                <h3>Ms colour choice game 0/55000</h3>
+                <p>(Bet ₹55000 on ms cresh Weekly to receive a ₹58 bons)</p>
+            </div>
+            <button class="go-btn" onclick="alert('Abhi game.html par jayein')">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 11. Colour Choice 75,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-colour"><i class="fa-solid fa-palette"></i></div>
+            <div class="event-details">
+                <h3>Ms colour choice game 0/75000</h3>
+                <p>(Bet ₹75000 on ms cresh Weekly to receive a ₹78 bons)</p>
+            </div>
+            <button class="go-btn" onclick="alert('Abhi game.html par jayein')">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 12. Number Choice 5,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-number"><i class="fa-solid fa-dice"></i></div>
+            <div class="event-details">
+                <h3>Ms Number choice Game 0/5000</h3>
+                <p>(Bet ₹5000 on ms cresh Weekly to receive a ₹48 bons)</p>
+            </div>
+            <button class="go-btn" onclick="alert('Abhi game.html par jayein')">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 13. Number Choice 7,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-number"><i class="fa-solid fa-dice"></i></div>
+            <div class="event-details">
+                <h3>Ms Number choice Game 0/7000</h3>
+                <p>(Bet ₹7000 on ms cresh Weekly to receive a ₹58 bons)</p>
+            </div>
+            <button class="go-btn" onclick="alert('Abhi game.html par jayein')">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- 14. Number Choice 10,000 -->
+        <div class="event-card">
+            <div class="icon-box icon-number"><i class="fa-solid fa-dice"></i></div>
+            <div class="event-details">
+                <h3>Ms Number choice Game 0/10000</h3>
+                <p>(Bet ₹10000 on ms cresh Weekly to receive a ₹98 bons)</p>
+            </div>
+            <button class="go-btn" onclick="alert('Abhi game.html par jayein')">GO COMPLETE <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        
+    </div>
+
+    <!-- Bottom Navigation (Saare links updated aur linked hain) -->
+    <div class="bottom-nav">
+        <!-- Home Button -->
+        <a href="skuskeskkkloginhome.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            Home
+        </a>
+        
+        <!-- Daily Rewards Button (Active) -->
+        <a href="skuskeskkkdailyrewards.html" class="nav-item active">
+            <i class="fa-solid fa-calendar-check"></i>
+            Daily Rewards
+        </a>
+        
+        <!-- Refer & Earn Button -->
+        <a href="sonusonumonufriendreferandearn.html" class="nav-item">
+            <i class="fa-solid fa-users"></i>
+            Refer & Earn
+        </a>
+        
+        <!-- Account Button -->
+        <a href="skkmunsiansihaasiaccount.html" class="nav-item">
+            <i class="fa-solid fa-user-gear"></i>
+            Account
+        </a>
+    </div>
+
+    <script>
+        // Total played bet ko live update karna
+        window.onload = function() {
+            let totalCrashBet = localStorage.getItem("crashGameTotalBet") || 0;
+            
+            // Jitne bhi crash game ke bet tasks hain, unme progress dikhao
+            let progressSpans = document.querySelectorAll(".crash-progress");
+            progressSpans.forEach(span => {
+                span.innerText = parseFloat(totalCrashBet).toFixed(0);
+            });
+        };
+    </script>
+</body>
+</html>
