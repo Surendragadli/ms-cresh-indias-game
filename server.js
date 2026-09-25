@@ -5,6 +5,14 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const app = express();
+// Saari HTML/CSS files ko allow karne ke liye
+app.use(express.static(__dirname));
+
+// Main link par index.html dikhane ke liye
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
 app.use(cors());
 app.use(express.json()); 
 
