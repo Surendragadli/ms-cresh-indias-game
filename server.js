@@ -16,6 +16,17 @@ app.get('/', (req, res) => {
 app.use(cors());
 app.use(express.json()); 
 
+// Main link par index.html dikhane ke liye (Yeh aapke paas pehle se hai)
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+// 👉 YAHAN SE NAYA CODE ADD KAREIN: Baaki saare HTML pages ko chalane ke liye
+app.get('/:page', (req, res) => {
+    res.sendFile(__dirname + '/' + req.params.page);
+});
+// 👈 YAHAN TAK
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: { origin: "*", methods: ["GET", "POST"] }
