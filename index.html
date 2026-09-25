@@ -92,14 +92,15 @@
             var icon = document.querySelector(".eye-icon");
             if (passInput.type === "password") {
                 passInput.type = "text";
-                icon.classList.remove("fa-eye-slash"); icon.classList.add("fa-eye");
+                icon.classList.remove("fa-eye-slash"); 
+                icon.classList.add("fa-eye");
             } else {
                 passInput.type = "password";
-                icon.classList.remove("fa-eye"); icon.classList.add("fa-eye-slash");
+                icon.classList.remove("fa-eye"); 
+                icon.classList.add("fa-eye-slash");
             }
         }
 
-        // Asli Backend API par Data bhejna
         async function validateForm(event) {
             event.preventDefault();
 
@@ -116,8 +117,8 @@
             regBtn.disabled = true;
 
             try {
-                // Backend Server ko Data bhej rahe hain
-                let response = await fetch("http://localhost:3000/register", {
+                // Port 5002 se connection
+                let response = await fetch("http://localhost:5002/register", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ mobile: mobile, password: password })
@@ -127,19 +128,16 @@
 
                 if (result.success) {
                     alert("✅ " + result.message);
-                    
-                    // Session ke liye browser me thoda sa data rakhenge
                     localStorage.setItem("savedMobile", mobile);
                     localStorage.setItem("userBalance", "59.00");
-                    
                     window.location.href = "login.html"; 
                 } else {
-                    alert("❌ " + result.message); // Ye error dega agar number double hoga
+                    alert("❌ " + result.message); 
                     regBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> REGISTER <i class="fa-solid fa-arrow-right"></i>';
                     regBtn.disabled = false;
                 }
             } catch (error) {
-                alert("❌ Server se connect nahi ho paya! Kya aapka Backend Server (node server.js) chalu hai?");
+                alert("❌ Server se connect nahi ho paya! Kripya check karein ki node server.js chalu hai ya nahi.");
                 regBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> REGISTER <i class="fa-solid fa-arrow-right"></i>';
                 regBtn.disabled = false;
             }
